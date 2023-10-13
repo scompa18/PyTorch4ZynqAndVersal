@@ -28,3 +28,5 @@ RUN useradd -ms /bin/bash mluser && \
 USER mluser
 ENV HOME /home/mluser
 WORKDIR /home/mluser
+
+RUN git clone https://github.com/pytorch/pytorch --recursive && cd pytorch
