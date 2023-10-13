@@ -35,6 +35,9 @@ RUN cd pytorch; git checkout v2.0.1; git submodule update --init --recursive
 
 RUN cd pytorch; pip3 install -r requirements.txt
 
+# Patch compilation error
+RUN cd pytorch/c10/util/; mv Registry.h Registry_old.h; sed '18 i #include <stdexcept>' Registry_old.h > Registry.h; rm Registry_old.h
+
 RUN export USE_CUDA=0;        \
     export USE_DISTRIBUTED=0; \
     export USE_CUDNN=0;       \
