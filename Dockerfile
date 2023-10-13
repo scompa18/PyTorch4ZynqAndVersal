@@ -30,3 +30,5 @@ ENV HOME /home/mluser
 WORKDIR /home/mluser
 
 RUN git clone https://github.com/pytorch/pytorch --recursive && cd pytorch
+
+RUN cd pytorch; git checkout v2.0.1; git submodule update --init --recursive
