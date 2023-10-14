@@ -36,22 +36,25 @@ RUN cd pytorch; git checkout v2.0.1; git submodule update --init --recursive
 RUN cd pytorch; pip3 install -r requirements.txt
 
 # Patch compilation error
-RUN cd pytorch/c10/util/; mv Registry.h Registry_old.h; sed '18 i #include <stdexcept>' Registry_old.h > Registry.h; rm Registry_old.h
+RUN sed -i '18 i #include <stdexcept>' pytorch/c10/util/Registry.h
+RUN sed -i -e '535d;536d' pytorch/caffe2/CMakeLists.txt
+RUN sed -i "3 i #include <cstdint>" pytorch/torch/csrc/jit/passes/quantization/quantization_type.h
 
-RUN export USE_CUDA=0;        \
-    export USE_DISTRIBUTED=0; \
-    export USE_CUDNN=0;       \
-    export USE_FBGEMM=0;      \
-    export USE_KINETO=0;      \
-    export USE_NUMPY=0;       \
-    export BUILD_TEST=0;      \
-    export USE_MKLDNN=0;      \
-    export USE_ITT=0;         \
-    export USE_NNPACK=0;      \
-    export USE_TENSORPIPE=0;  \
-    export USE_GLOO=0;        \
-    export USE_MPI=0;         \
-    export USE_SYSTEM_NCCL=0; \
-    export BUILD_CAFFE2=0;    \
-    export USE_OPENMP=0;      \
-    cd pytorch; python3 setup.py bdist_wheel
+RUN export USE_CUDA=0;         \
+    export USE_DISTRIBUTED=0;  \
+    export USE_CUDNN=0;        \
+    export USE_FBGEMM=0;       \
+    export USE_KINETO=0;       \
+    export USE_NUMPY=0;        \
+    export BUILD_TEST=0;       \
+    export USE_MKLDNN=0;       \
+    export USE_ITT=0;          \
+    export USE_NNPACK=0;       \
+    export USE_TENSORPIPE=0;   \
+    export USE_GLOO=0;         \
+    export USE_MPI=0;          \
+    export USE_SYSTEM_NCCL=0;  \
+    export BUILD_CAFFE2_OPS=0; \
+    export BUILD_CAFFE2=0;     \
+    export USE_OPENMP=0;       \
+    cd pytorch; python3 setup.py bdist_wheel; exit 0
